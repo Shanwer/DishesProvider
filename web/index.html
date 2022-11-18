@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Shanwer Start</title>
+    <meta name="description" content="List what are delicious to eat for Shanwer.">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&amp;display=swap">
+    <link rel="stylesheet" href="assets/css/Articles-Cards.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body style="text-align: center;">
+    <div class="container py-4 py-xl-5">
+        <div class="row mb-5">
+            <div class="col-md-8 col-xl-6 text-center mx-auto" data-aos="fade" data-aos-delay="50">
+                <h2 id="$sentence"></h2>
+                <p class="w-lg-50"></p>
+            </div>
+        </div>
+        <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body p-4" data-aos="fade" data-aos-delay="100">
+                        <p class="text-primary card-text mb-0">早上吃</p>
+                        <h4 class="card-title">对不起，懒狗早饭只能skip了（</h4>
+                        <div class="d-flex">
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body p-4" data-aos="fade" data-aos-delay="150">
+                        <p class="text-primary card-text mb-0">中午吃</p>
+                        <h4 id="$lunch" class="card-title"></h4>
+                        <p class="card-text"></p>
+                        <div class="d-flex">
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body p-4" data-aos="fade" data-aos-delay="200">
+                        <p class="text-primary card-text mb-0">晚上吃</p>
+                        <h4 id="$dinner" class="card-title"></h4>
+                        <div class="d-flex">
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><button class="btn btn-primary" data-aos="fade" data-aos-delay="300" type="button"><a style="color: var(--bs-cyan);" href="http://start.shanwer.top">刷新菜单</a></button>
+    <script>
+        var url = "http://api.shanwer.top:8080";;
+        //发起get请求
+        var promise = fetch(url).then(function(response) {
+        //response.status表示响应的http状态码
+        if(response.status === 200){
+        //json是返回的response提供的一个方法,会把返回的json字符串反序列化成对象,也被包装成一个Promise了
+        return response.json();
+        }else{
+        return {}
+        }
+        });
+        promise = promise.then(function(data){
+        //响应的内容
+            document.getElementById("$sentence").innerHTML=data[1];
+            document.getElementById("$lunch").innerHTML=data[2];
+            document.getElementById("$dinner").innerHTML=data[3];
+        }).catch(function(err){
+        console.log(err);
+        })
+    </script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+</body>
+
+</html>

@@ -1,8 +1,6 @@
 package top.shanwer;
 
 import io.javalin.Javalin;
-
-import java.io.IOException;
 import java.util.Random;
 public class Main {
     public static void main(String[] args){
@@ -16,7 +14,7 @@ public class Main {
         //      6.再来点每日金句做鸡汤鼓励可怜的sw（ （大概完成了） √
         //Scanner menu = new Scanner(Path.of("menu.txt"), StandardCharsets.UTF_8); //不用Path.of()，有Paths.get()了，虽然不知道区别
 
-        final int mode = 2; //开控制台还是网页
+        final int mode = 2; //开控制台还是后端服务器模式
         switch (mode) {
             case 0:
                 System.out.println(new getString().getSentence());
@@ -37,8 +35,10 @@ public class Main {
 
             case 2:
                 var returnJsonApp = Javalin.create(/*config*/)
-                        .before(ctx -> ctx.header("Access-Control-Allow-Origin", "*"))//后端还需要开发跨域，否则无法调用API
-                        .get("/", ctx -> ctx.json(new getJson().getJson()))
+                        .before(ctx -> ctx.header("Access-Control-Allow-Origin", "*"))//后端还需要加上跨域，否则无法调用API
+                        .get("/", ctx -> ctx.json(new getJson().getAll()))
+                        .get("/refreshLunch", ctx -> ctx.json(new getJson().getLunch()))
+                        .get("/refreshDinner", ctx -> ctx.json(new getJson().getDinner()))
                         .start(8080);
                 double jsonEndTime = System.nanoTime();
                 System.out.println("开启服务端后所用时间:" + (jsonEndTime - startTime) / 1000000000 + "秒");
@@ -51,6 +51,5 @@ public class Main {
         //randomNumber.setSeed(); 如果使用确定的种子会生成一样的结果
         i = randomNumber.nextInt(i);
         return i;
-        //有一个问题是有时候会有两个一摸一样的随机数，明明是获取系统时间然后搞的随机数，真奇怪
     }
 }

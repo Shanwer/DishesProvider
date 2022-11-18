@@ -14,12 +14,12 @@ public class getString {
     Calendar cal = Calendar.getInstance();
     int day = cal.get(Calendar.DAY_OF_WEEK);
     boolean whetherRest = day == 1 || day == 7;
-    //Path weekdayMenu = Paths.get("Dishes/weekdayDishes.txt");//服务器上的(
-    //Path weekendMenu = Paths.get("Dishes/weekendDishes.txt");
-    //Path weekdayMenu = Paths.get("C:\Users\Shanwer\Documents\Work\Code\DishesProvider\out\artifacts\DishesProvider_jar\weekdayDishes.txt");//本地idea方便调试用的绝对路径
-    //Path weekendMenu = Paths.get("C:\Users\Shanwer\Documents\Work\Code\DishesProvider\out\artifacts\DishesProvider_jar\weekendDishes.txt");
-    Path weekdayMenu = Paths.get("weekdayDishes.txt");
-    Path weekendMenu = Paths.get("weekendDishes.txt");
+    Path weekdayMenu = Paths.get("Dishes/weekdayDishes.txt");//服务器上的(
+    Path weekendMenu = Paths.get("Dishes/weekendDishes.txt");
+    //Path weekdayMenu = Paths.get("C:\\Users\\Shanwer\\Documents\\Work\\Code\\DishesProvider\\out\\artifacts\\DishesProvider_jar\\weekdayDishes.txt");//本地idea方便调试用的绝对路径
+    //Path weekendMenu = Paths.get("C:\\Users\\Shanwer\\Documents\\Work\\Code\\DishesProvider\\out\\artifacts\\DishesProvider_jar\\weekendDishes.txt");
+    //Path weekdayMenu = Paths.get("weekdayDishes.txt");//release使用的
+    //Path weekendMenu = Paths.get("weekendDishes.txt");
     long weekdayLineCount;//Warning的意思是这个方法没有使用'try'-with-resources语句，后果就是在读取文件的时候对文件进行操作就会寄
     long weekendLineCount;
     Scanner weekdayMenuScanner;//不加StandardCharsets的话Windows会以GBK编码读取，导致输出乱码
@@ -69,7 +69,8 @@ public class getString {
                 "今天是工作日，加把劲sw！",
                 "给老子卷！不许休息！！",
                 "你这个年纪怎么睡得着觉的？",
-                "For the greater good!冲啊啊啊啊!!"
+                "不要再卷了啊！",
+                "赞美躺平！"
         };
         return whetherRest ? weekendSentence : weekdaySentence[randomIndex(weekdaySentence.length)];
     }
