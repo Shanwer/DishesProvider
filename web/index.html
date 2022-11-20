@@ -57,7 +57,8 @@
                 </div>
             </div>
         </div>
-    </div><button class="btn btn-primary" data-aos="fade" data-aos-delay="300" type="button"><a style="color: var(--bs-cyan);" href="http://start.shanwer.top">刷新菜单</a></button>
+    </div>
+    <a id="$refreshButton" class="btn btn-primary" data-aos="fade" data-aos-delay="300" role="button">刷新菜单</a>
     <script>
         var url = "http://api.shanwer.top:8080";;
         //发起get请求
@@ -78,6 +79,30 @@
         }).catch(function(err){
         console.log(err);
         })
+
+        document.getElementById("$refreshButton").onclick = refresh;
+        
+        function refresh(){
+        var url = "http://api.shanwer.top:8080/refreshAll";;
+        //发起get请求
+        var promise = fetch(url).then(function(response) {
+        //response.status表示响应的http状态码
+        if(response.status === 200){
+        //json是返回的response提供的一个方法,会把返回的json字符串反序列化成对象,也被包装成一个Promise了
+        return response.json();
+        }else{
+        return {}
+        }
+        });
+        promise = promise.then(function(data){
+        //响应的内容
+            document.getElementById("$sentence").innerHTML=data[1];
+            document.getElementById("$lunch").innerHTML=data[2];
+            document.getElementById("$dinner").innerHTML=data[3];
+        }).catch(function(err){
+        console.log(err);
+        })
+    }
     </script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/bs-init.js"></script>

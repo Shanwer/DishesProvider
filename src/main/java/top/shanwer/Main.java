@@ -1,6 +1,7 @@
 package top.shanwer;
 
 import io.javalin.Javalin;
+
 import java.util.Random;
 public class Main {
     public static void main(String[] args){
@@ -25,7 +26,7 @@ public class Main {
                 break;
 
             case 1:
-                var returnHtmlApp = Javalin.create(/*config*/)
+                Javalin returnHtmlApp = Javalin.create(/*config*/)
                         .before(ctx -> ctx.header("Content-Type", "text/html;charset=utf-8"))
                         .get("/", ctx -> ctx.result(new getString().getSentence() + "<br/>" + new getString().getLunch() + "<br/>" + new getString().getDinner()))
                         .start(8080);
@@ -34,17 +35,18 @@ public class Main {
                 break;
 
             case 2:
-                var returnJsonApp = Javalin.create(/*config*/)
+                getJson obj = new getJson();//得到一个静态的getJson对象
+                Javalin returnJsonApp = Javalin.create(/*config*/)
                         .before(ctx -> ctx.header("Access-Control-Allow-Origin", "*"))//后端还需要加上跨域，否则无法调用API
-                        .get("/", ctx -> ctx.json(new getJson().getAll()))
-                        .get("/refreshLunch", ctx -> ctx.json(new getJson().getLunch()))
-                        .get("/refreshDinner", ctx -> ctx.json(new getJson().getDinner()))
+                        .get("/", ctx -> ctx.json(obj.getOnce()))
+                        .get("/refreshAll", ctx -> ctx.json(obj.getAll()))
+                        .get("/refreshLunch", ctx -> ctx.json(obj.getLunch()))
+                        .get("/refreshDinner", ctx -> ctx.json(obj.getDinner()))
                         .start(8080);
                 double jsonEndTime = System.nanoTime();
                 System.out.println("开启服务端后所用时间:" + (jsonEndTime - startTime) / 1000000000 + "秒");
                 break;
         }
-
     }
     public static int randomIndex(int i) {
         Random randomNumber = new Random();
