@@ -60,7 +60,7 @@
     </div>
     <a id="$refreshButton" class="btn btn-primary" data-aos="fade" data-aos-delay="300" role="button">刷新菜单</a>
     <script>
-        var url = "http://api.shanwer.top:8080";;
+        var url = "http://api.shanwer.top:8080/normalRequest";
         //发起get请求
         var promise = fetch(url).then(function(response) {
         //response.status表示响应的http状态码
@@ -81,9 +81,8 @@
         })
 
         document.getElementById("$refreshButton").onclick = refresh;
-        
         function refresh(){
-        var url = "http://api.shanwer.top:8080/refreshAll";;
+        url = "http://api.shanwer.top:8080/refreshAll/default";
         //发起get请求
         var promise = fetch(url).then(function(response) {
         //response.status表示响应的http状态码

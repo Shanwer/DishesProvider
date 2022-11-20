@@ -3,6 +3,7 @@ package top.shanwer;
 import io.javalin.Javalin;
 
 import java.util.Random;
+
 public class Main {
     public static void main(String[] args){
         double startTime = System.nanoTime();
@@ -15,12 +16,16 @@ public class Main {
         //      6.再来点每日金句做鸡汤鼓励可怜的sw（ （大概完成了） √
         //Scanner menu = new Scanner(Path.of("menu.txt"), StandardCharsets.UTF_8); //不用Path.of()，有Paths.get()了，虽然不知道区别
 
+
         final int mode = 2; //开控制台还是后端服务器模式
         switch (mode) {
             case 0:
-                System.out.println(new getString().getSentence());
-                System.out.println("中饭吃:" + new getString().getLunch());
-                System.out.println("晚饭吃:" + new getString().getDinner());
+                String[] Dishes = new String[2];
+                Dishes[0] = new GetString().getString();
+                Dishes[1] = new GetString().getString();
+                System.out.println(new GetString().getSentence());
+                System.out.println("中饭吃:" + Dishes[0]);
+                System.out.println("晚饭吃:" + Dishes[1]);
                 double cmdEndTime = System.nanoTime();
                 System.out.println("执行命令行程序所用时间:" + (cmdEndTime - startTime) / 1000000000 + "秒");
                 break;
@@ -28,20 +33,26 @@ public class Main {
             case 1:
                 Javalin returnHtmlApp = Javalin.create(/*config*/)
                         .before(ctx -> ctx.header("Content-Type", "text/html;charset=utf-8"))
-                        .get("/", ctx -> ctx.result(new getString().getSentence() + "<br/>" + new getString().getLunch() + "<br/>" + new getString().getDinner()))
+                        .get("/", ctx -> ctx.result(new GetString().getSentence() + "<br/>" + new GetString().getString() + "<br/>" + new GetString().getString()))
                         .start(8080);
                 double htmlEndTime = System.nanoTime();
                 System.out.println("开启服务端后所用时间:" + (htmlEndTime - startTime) / 1000000000 + "秒");
                 break;
 
             case 2:
-                getJson obj = new getJson();//得到一个静态的getJson对象
+                GetJson obj = new GetJson();//得到一个静态的getJson对象
                 Javalin returnJsonApp = Javalin.create(/*config*/)
                         .before(ctx -> ctx.header("Access-Control-Allow-Origin", "*"))//后端还需要加上跨域，否则无法调用API
-                        .get("/", ctx -> ctx.json(obj.getOnce()))
-                        .get("/refreshAll", ctx -> ctx.json(obj.getAll()))
-                        .get("/refreshLunch", ctx -> ctx.json(obj.getLunch()))
-                        .get("/refreshDinner", ctx -> ctx.json(obj.getDinner()))
+                        .get("/normalRequest", ctx -> ctx.json(obj.getOnce()))
+                        .get("/refreshAll/{pathParam}", ctx -> {
+                            if(ctx.pathParam("pathParam").equals("default")){
+                                ctx.json(obj.getAll());
+                            }else{
+                                ctx.json(obj.getWeekday());
+                            }
+                            })
+                        //.get("/refreshLunch", ctx -> ctx.json(obj.getLunch()))
+                        //.get("/refreshDinner", ctx -> ctx.json(obj.getDinner()))
                         .start(8080);
                 double jsonEndTime = System.nanoTime();
                 System.out.println("开启服务端后所用时间:" + (jsonEndTime - startTime) / 1000000000 + "秒");
