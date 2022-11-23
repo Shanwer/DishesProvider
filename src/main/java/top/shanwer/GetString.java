@@ -24,6 +24,7 @@ public class GetString {
     long weekendLineCount;
     Scanner weekdayMenuScanner;//不加StandardCharsets的话Windows会以GBK编码读取，导致输出乱码
     Scanner weekendMenuScanner;
+
     {
         try {
             weekdayLineCount = Files.lines(weekdayMenu).count();
@@ -34,9 +35,11 @@ public class GetString {
             throw new RuntimeException(e);
         }
     }//try之后不是和嵌套那样结束内部嵌套外部数据就无了，不用担心
+
     String[] weekdayDishes = new String[(int) weekdayLineCount];
     String[] weekendDishes = new String[(int) weekendLineCount];
-    public String getString(){
+
+    public String getString() {
         for (int weekdayCount = 0; weekdayMenuScanner.hasNextLine(); weekdayCount++) {
             this.weekdayDishes[weekdayCount] = weekdayMenuScanner.nextLine();
             //System.out.println(weekdayCount + weekdayDishes[weekdayCount]);
@@ -48,13 +51,15 @@ public class GetString {
         //按照调试结果判断，结束了一个for循环Scanner就得重新nextLine()了，折磨自己干啥，两个文件就好了
         return whetherRest ? weekendDishes[randomIndex(weekendDishes.length)] : weekdayDishes[randomIndex(weekdayDishes.length)];
     }
-    public String getWeekdayDishes(){
+
+    public String getWeekdayDishes() {
         for (int weekdayCount = 0; weekdayMenuScanner.hasNextLine(); weekdayCount++) {
             weekdayDishes[weekdayCount] = weekdayMenuScanner.nextLine();
         }
         return weekdayDishes[randomIndex(weekdayDishes.length)];
     }
-    public String getSentence(){
+
+    public String getSentence() {
         String weekendSentence = "今天是周末哦，好好休息吧sw~";
         //String weekdaySentence = "今天是工作日，加把劲sw！";
         String[] weekdaySentence = {
@@ -64,6 +69,18 @@ public class GetString {
                 "不要再卷了啊！",
                 "赞美躺平！"
         };
-        return whetherRest ? weekendSentence : weekdaySentence[randomIndex(weekdaySentence.length)];
+
+        if (whetherRest) {
+            if (randomIndex(5) % 2 != 0)
+                //选取动画、文学、诗词与哲学四个分类，返回纯洁文本
+                //之所以是5是因为是喜欢的数字&&让抽取weekdaySentence的概率变的等可能
+                return HttpGet.sendGet("https://v1.hitokoto.cn", "c=a&c=d&c=i&c=k&encode=text");
+            else
+                return weekendSentence;
+        }else
+            if (randomIndex(5) % 2 != 0)
+                return HttpGet.sendGet("https://v1.hitokoto.cn", "c=a&c=d&c=i&c=k&encode=text");
+            else
+                return weekdaySentence[randomIndex(weekdaySentence.length)];
     }
 }

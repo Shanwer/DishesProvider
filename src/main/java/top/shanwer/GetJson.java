@@ -7,25 +7,25 @@ public class GetJson {
     String getDinner = new GetString().getString();
     public Object getOnce() {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("1",new GetString().getSentence());
-        jsonObject.put("2",getLunch);
-        jsonObject.put("3",getDinner);
+        jsonObject.put("sentence",new GetString().getSentence());
+        jsonObject.put("lunch",getLunch);
+        jsonObject.put("dinner",getDinner);
         return jsonObject;
     }
     public Object getAll() {
         JSONObject jsonObject = new JSONObject();
         this.getLunch = new GetString().getString();
         this.getDinner = new GetString().getString();
-        jsonObject.put("1",new GetString().getSentence());
-        jsonObject.put("2",getLunch);
-        jsonObject.put("3",getDinner);
+        jsonObject.put("sentence",new GetString().getSentence());
+        jsonObject.put("lunch",getLunch);
+        jsonObject.put("dinner",getDinner);
         return jsonObject;
     }
     public Object getWeekday() {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("1", "接收到特殊参数请求，呈现weekDay食物");
-        jsonObject.put("2",new GetString().getWeekdayDishes());
-        jsonObject.put("3",new GetString().getWeekdayDishes());
+        jsonObject.put("sentence", "接收到特殊参数请求，呈现weekDay食物");
+        jsonObject.put("lunch",new GetString().getWeekdayDishes());
+        jsonObject.put("dinner",new GetString().getWeekdayDishes());
         return jsonObject;
     }
     /*public Object getLunch() {

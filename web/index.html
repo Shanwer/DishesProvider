@@ -73,9 +73,9 @@
         });
         promise = promise.then(function(data){
         //响应的内容
-            document.getElementById("$sentence").innerHTML=data[1];
-            document.getElementById("$lunch").innerHTML=data[2];
-            document.getElementById("$dinner").innerHTML=data[3];
+            document.getElementById("$sentence").innerHTML=data.sentence;
+            document.getElementById("$lunch").innerHTML=data.lunch;
+            document.getElementById("$dinner").innerHTML=data.dinner;
         }).catch(function(err){
         console.log(err);
         })
@@ -95,9 +95,9 @@
         });
         promise = promise.then(function(data){
         //响应的内容
-            document.getElementById("$sentence").innerHTML=data[1];
-            document.getElementById("$lunch").innerHTML=data[2];
-            document.getElementById("$dinner").innerHTML=data[3];
+            document.getElementById("$sentence").innerHTML=data.sentence;
+            document.getElementById("$lunch").innerHTML=data.lunch;
+            document.getElementById("$dinner").innerHTML=data.dinner;
         }).catch(function(err){
         console.log(err);
         })

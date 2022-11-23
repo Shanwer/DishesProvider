@@ -60,9 +60,8 @@ public class Main {
         }
     }
     public static int randomIndex(int i) {
-        Random randomNumber = new Random();
+        //Random randomNumber = new Random();
         //randomNumber.setSeed(); 如果使用确定的种子会生成一样的结果
-        i = randomNumber.nextInt(i);
-        return i;
+        return new Random().nextInt(i);
     }
 }
