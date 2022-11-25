@@ -66,12 +66,12 @@
         //response.status表示响应的http状态码
         if(response.status === 200){
         //json是返回的response提供的一个方法,会把返回的json字符串反序列化成对象,也被包装成一个Promise了
-        return response.json();
-        }else{
-        return {}
+            return response.json();
+            }else{
+            return {}
         }
         });
-        promise = promise.then(function(data){
+        promise.then(function(data){
         //响应的内容
             document.getElementById("$sentence").innerHTML=data.sentence;
             document.getElementById("$lunch").innerHTML=data.lunch;
@@ -82,26 +82,64 @@
 
         document.getElementById("$refreshButton").onclick = refresh;
         function refresh(){
-        url = "http://api.shanwer.top:8080/refreshAll/default";
-        //发起get请求
-        var promise = fetch(url).then(function(response) {
-        //response.status表示响应的http状态码
-        if(response.status === 200){
-        //json是返回的response提供的一个方法,会把返回的json字符串反序列化成对象,也被包装成一个Promise了
-        return response.json();
-        }else{
-        return {}
+            var url = "http://api.shanwer.top:8080/refreshAll/default";
+            //发起get请求
+            var promise = fetch(url).then(function(response) {
+            //response.status表示响应的http状态码
+            if(response.status === 200){
+            //json是返回的response提供的一个方法,会把返回的json字符串反序列化成对象,也被包装成一个Promise了
+            return response.json();
+            }else{
+                return {}
+            }
+            });
+            promise.then(function(data){
+                document.getElementById("$sentence").innerHTML=data.sentence;
+                document.getElementById("$lunch").innerHTML=data.lunch;
+                document.getElementById("$dinner").innerHTML=data.dinner;
+            }).catch(function(err){
+            console.log(err);
+            })
         }
-        });
-        promise = promise.then(function(data){
-        //响应的内容
-            document.getElementById("$sentence").innerHTML=data.sentence;
-            document.getElementById("$lunch").innerHTML=data.lunch;
-            document.getElementById("$dinner").innerHTML=data.dinner;
-        }).catch(function(err){
-        console.log(err);
-        })
-    }
+
+        var btn=document.getElementById("$refreshButton");
+        var timer;
+
+        var touchstartHandler=function(event){
+            timer=setTimeout(longPress,500);
+        }
+
+        var touchmoveHandler=function(event){
+            event.preventDefault();
+            clearTimeout(timer);
+            timer=null;
+        }
+
+        var touchendHandler=function(event){
+            event.preventDefault();
+            clearTimeout(timer);
+            return false;
+        }
+        function longPress(){
+            var url = "http://api.shanwer.top:8080/refreshAll/special";
+            var promise = fetch(url).then(function(response) {
+                return response.json()
+            });
+            promise.then(function(data){
+                document.getElementById("$sentence").innerHTML=data.sentence;
+                document.getElementById("$lunch").innerHTML=data.lunch;
+                document.getElementById("$dinner").innerHTML=data.dinner;
+            }).catch(function(err){
+            console.log(err);
+            })
+        }
+    // 移动端+PC端事件监听器
+    btn.addEventListener("touchstart",touchstartHandler,false);
+    btn.addEventListener("touchmove",touchmoveHandler,false);
+    btn.addEventListener("touchend",touchendHandler,false);
+    btn.addEventListener("mousedown",touchstartHandler,false);
+    btn.addEventListener("mousemove",touchmoveHandler,false);
+    btn.addEventListener("mouseup",touchendHandler,false);
     </script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
