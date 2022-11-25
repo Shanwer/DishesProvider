@@ -14,136 +14,133 @@
 </head>
 
 <body style="text-align: center;">
-    <div class="container py-4 py-xl-5">
-        <div class="row mb-5">
-            <div class="col-md-8 col-xl-6 text-center mx-auto" data-aos="fade" data-aos-delay="50">
-                <h2 id="$sentence"></h2>
-                <p class="w-lg-50"></p>
+<div class="container py-4 py-xl-5">
+    <div class="row mb-5">
+        <div class="col-md-8 col-xl-6 text-center mx-auto" data-aos="fade" data-aos-delay="50">
+            <h2 id="$sentence"></h2>
+            <p class="w-lg-50"></p>
+        </div>
+    </div>
+    <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-body p-4" data-aos="fade" data-aos-delay="100">
+                    <p class="text-primary card-text mb-0">早上吃</p>
+                    <h4 class="card-title">对不起，懒狗早饭只能skip了（</h4>
+                    <div class="d-flex">
+                        <div></div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body p-4" data-aos="fade" data-aos-delay="100">
-                        <p class="text-primary card-text mb-0">早上吃</p>
-                        <h4 class="card-title">对不起，懒狗早饭只能skip了（</h4>
-                        <div class="d-flex">
-                            <div></div>
-                        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body p-4" data-aos="fade" data-aos-delay="150">
+                    <p class="text-primary card-text mb-0">中午吃</p>
+                    <h4 id="$lunch" class="card-title"></h4>
+                    <p class="card-text"></p>
+                    <div class="d-flex">
+                        <div></div>
                     </div>
                 </div>
             </div>
-            <div class="col">
-                <div class="card">
-                    <div class="card-body p-4" data-aos="fade" data-aos-delay="150">
-                        <p class="text-primary card-text mb-0">中午吃</p>
-                        <h4 id="$lunch" class="card-title"></h4>
-                        <p class="card-text"></p>
-                        <div class="d-flex">
-                            <div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card">
-                    <div class="card-body p-4" data-aos="fade" data-aos-delay="200">
-                        <p class="text-primary card-text mb-0">晚上吃</p>
-                        <h4 id="$dinner" class="card-title"></h4>
-                        <div class="d-flex">
-                            <div></div>
-                        </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body p-4" data-aos="fade" data-aos-delay="200">
+                    <p class="text-primary card-text mb-0">晚上吃</p>
+                    <h4 id="$dinner" class="card-title"></h4>
+                    <div class="d-flex">
+                        <div></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <a id="$refreshButton" class="btn btn-primary" data-aos="fade" data-aos-delay="300" role="button">刷新菜单</a>
-    <script>
-        var url = "http://api.shanwer.top:8080/normalRequest";
-        //发起get请求
-        var promise = fetch(url).then(function(response) {
+</div>
+<a id="$refreshButton" class="btn btn-primary" data-aos="fade" data-aos-delay="300" role="button">刷新菜单</a>
+<script>
+    var url = "http://api.shanwer.top:8080/normalRequest";
+    //发起get请求
+    var promise = fetch(url).then(function(response) {
         //response.status表示响应的http状态码
         if(response.status === 200){
-        //json是返回的response提供的一个方法,会把返回的json字符串反序列化成对象,也被包装成一个Promise了
+            //json是返回的response提供的一个方法,会把返回的json字符串反序列化成对象,也被包装成一个Promise了
             return response.json();
-            }else{
+        }else{
             return {}
         }
+    });
+    promise.then(function(data){
+        //响应的内容
+        document.getElementById("$sentence").innerHTML=data.sentence;
+        document.getElementById("$lunch").innerHTML=data.lunch;
+        document.getElementById("$dinner").innerHTML=data.dinner;
+    }).catch(function(err){
+        console.log(err);
+    })
+
+    document.getElementById("$refreshButton").onclick = refresh;
+    function refresh(){
+        url = "http://api.shanwer.top:8080/refreshAll/default";
+        //发起get请求
+        var promise = fetch(url).then(function(response) {
+            //response.status表示响应的http状态码
+            if(response.status === 200){
+                //json是返回的response提供的一个方法,会把返回的json字符串反序列化成对象,也被包装成一个Promise了
+                return response.json();
+            }else{
+                return {}
+            }
         });
         promise.then(function(data){
-        //响应的内容
+            //响应的内容
             document.getElementById("$sentence").innerHTML=data.sentence;
             document.getElementById("$lunch").innerHTML=data.lunch;
             document.getElementById("$dinner").innerHTML=data.dinner;
         }).catch(function(err){
-        console.log(err);
+            console.log(err);
         })
+    }
+    var btn=document.getElementById("$refreshButton");
+    var timer;
 
-        document.getElementById("$refreshButton").onclick = refresh;
-        function refresh(){
-            var url = "http://api.shanwer.top:8080/refreshAll/default";
-            //发起get请求
-            var promise = fetch(url).then(function(response) {
-            //response.status表示响应的http状态码
-            if(response.status === 200){
-            //json是返回的response提供的一个方法,会把返回的json字符串反序列化成对象,也被包装成一个Promise了
-            return response.json();
-            }else{
-                return {}
-            }
-            });
-            promise.then(function(data){
-                document.getElementById("$sentence").innerHTML=data.sentence;
-                document.getElementById("$lunch").innerHTML=data.lunch;
-                document.getElementById("$dinner").innerHTML=data.dinner;
-            }).catch(function(err){
+    var touchstartHandler=function(event){
+        timer=setTimeout(longPress,500);
+    }
+
+    var touchmoveHandler=function(event){
+        event.preventDefault();
+        clearTimeout(timer);
+        timer=null;
+    }
+
+    var touchendHandler=function(event){
+        event.preventDefault();
+        clearTimeout(timer);
+        return false;
+    }
+    function longPress(){
+        var url = "http://api.shanwer.top:8080/refreshAll/special";
+        var promise = fetch(url).then(function(response) {
+            return response.json()
+        });
+        promise.then(function(data){
+            document.getElementById("$sentence").innerHTML=data.sentence;
+            document.getElementById("$lunch").innerHTML=data.lunch;
+            document.getElementById("$dinner").innerHTML=data.dinner;
+        }).catch(function(err){
             console.log(err);
-            })
-        }
-
-        var btn=document.getElementById("$refreshButton");
-        var timer;
-
-        var touchstartHandler=function(event){
-            timer=setTimeout(longPress,500);
-        }
-
-        var touchmoveHandler=function(event){
-            event.preventDefault();
-            clearTimeout(timer);
-            timer=null;
-        }
-
-        var touchendHandler=function(event){
-            event.preventDefault();
-            clearTimeout(timer);
-            return false;
-        }
-        function longPress(){
-            var url = "http://api.shanwer.top:8080/refreshAll/special";
-            var promise = fetch(url).then(function(response) {
-                return response.json()
-            });
-            promise.then(function(data){
-                document.getElementById("$sentence").innerHTML=data.sentence;
-                document.getElementById("$lunch").innerHTML=data.lunch;
-                document.getElementById("$dinner").innerHTML=data.dinner;
-            }).catch(function(err){
-            console.log(err);
-            })
-        }
-    // 移动端+PC端事件监听器
-    btn.addEventListener("touchstart",touchstartHandler,false);
-    btn.addEventListener("touchmove",touchmoveHandler,false);
-    btn.addEventListener("touchend",touchendHandler,false);
+        })
+    }
+    //PC端事件监听器
     btn.addEventListener("mousedown",touchstartHandler,false);
     btn.addEventListener("mousemove",touchmoveHandler,false);
     btn.addEventListener("mouseup",touchendHandler,false);
-    </script>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/bs-init.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+</script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/bs-init.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 </body>
 
 </html>
