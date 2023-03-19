@@ -11,51 +11,46 @@ import java.util.Scanner;
 import static top.shanwer.Main.randomIndex;
 
 public class GetString {
-    Calendar cal = Calendar.getInstance();
-    int day = cal.get(Calendar.DAY_OF_WEEK);
-    boolean whetherRest = day == 1 || day == 7;
-    Path weekdayMenu = Paths.get("Dishes/weekdayDishes.txt");//服务器上的(
-    Path weekendMenu = Paths.get("Dishes/weekendDishes.txt");
+    private final boolean whetherRest;
     //Path weekdayMenu = Paths.get("C:\\Users\\Shanwer\\Documents\\Work\\Code\\DishesProvider\\out\\artifacts\\DishesProvider_jar\\weekdayDishes.txt");//本地idea方便调试用的绝对路径
     //Path weekendMenu = Paths.get("C:\\Users\\Shanwer\\Documents\\Work\\Code\\DishesProvider\\out\\artifacts\\DishesProvider_jar\\weekendDishes.txt");
     //Path weekdayMenu = Paths.get("weekdayDishes.txt");//release使用的
     //Path weekendMenu = Paths.get("weekendDishes.txt");
-    long weekdayLineCount;//Warning的意思是这个方法没有使用'try'-with-resources语句，后果就是在读取文件的时候对文件进行操作就会寄
-    long weekendLineCount;
-    Scanner weekdayMenuScanner;//不加StandardCharsets的话Windows会以GBK编码读取，导致输出乱码
-    Scanner weekendMenuScanner;
+    private final String[] weekdayDishes;
+    private final String[] weekendDishes;
+    public GetString(){
+        Calendar cal = Calendar.getInstance();
+        int day = cal.get(Calendar.DAY_OF_WEEK);
+        whetherRest = day == 1 || day == 7;
+        Path weekdayMenu = Paths.get("Dishes/weekdayDishes.txt");
+        Path weekendMenu = Paths.get("Dishes/weekendDishes.txt");
+        //用了try-with-resources语句，避免无法正确关闭文件
+        try (Scanner weekdayMenuScanner = new Scanner(weekdayMenu, StandardCharsets.UTF_8);//不加StandardCharsets的话Windows会以GBK编码读取，导致输出乱码
+             Scanner weekendMenuScanner = new Scanner(weekendMenu, StandardCharsets.UTF_8)) {
+            long weekdayLineCount = Files.lines(weekdayMenu).count();
+            long weekendLineCount = Files.lines(weekendMenu).count();
 
-    {
-        try {
-            weekdayLineCount = Files.lines(weekdayMenu).count();
-            weekendLineCount = Files.lines(weekendMenu).count();
-            weekdayMenuScanner = new Scanner(weekdayMenu, StandardCharsets.UTF_8);
-            weekendMenuScanner = new Scanner(weekendMenu, StandardCharsets.UTF_8);
+            weekdayDishes = new String[(int) weekdayLineCount];
+            weekendDishes = new String[(int) weekendLineCount];
+
+            for (int i = 0; i < weekdayLineCount; i++) {
+                weekdayDishes[i] = weekdayMenuScanner.nextLine();
+            }
+
+            for (int i = 0; i < weekendLineCount; i++) {
+                weekendDishes[i] = weekendMenuScanner.nextLine();
+            }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }//try之后不是和嵌套那样结束内部嵌套外部数据就无了，不用担心
-
-    String[] weekdayDishes = new String[(int) weekdayLineCount];
-    String[] weekendDishes = new String[(int) weekendLineCount];
+    }
 
     public String getString() {
-        for (int weekdayCount = 0; weekdayMenuScanner.hasNextLine(); weekdayCount++) {
-            this.weekdayDishes[weekdayCount] = weekdayMenuScanner.nextLine();
-            //System.out.println(weekdayCount + weekdayDishes[weekdayCount]);
-        }
-        for (int weekendCount = 0; weekendMenuScanner.hasNextLine(); weekendCount++) {
-            weekendDishes[weekendCount] = weekendMenuScanner.nextLine();
-            //System.out.println(weekendCount + weekdayDishes[weekendCount]);
-        }
-        //按照调试结果判断，结束了一个for循环Scanner就得重新nextLine()了，折磨自己干啥，两个文件就好了
         return whetherRest ? weekendDishes[randomIndex(weekendDishes.length)] : weekdayDishes[randomIndex(weekdayDishes.length)];
     }
 
     public String getWeekdayDishes() {
-        for (int weekdayCount = 0; weekdayMenuScanner.hasNextLine(); weekdayCount++) {
-            weekdayDishes[weekdayCount] = weekdayMenuScanner.nextLine();
-        }
         return weekdayDishes[randomIndex(weekdayDishes.length)];
     }
 
